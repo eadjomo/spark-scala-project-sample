@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.github.okulab</groupId>
+    <artifactId>dlt</artifactId>
+    <version>2.2.0-SNAPSHOT</version>
+  </parent>
+
+  <groupId>com.github.okulab</groupId>
+  <artifactId>spark-scala-project-sample</artifactId>
+  <version>2.2.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <modules>
+    <module>sample-conf</module>
+    <module>sample-job</module>
+  </modules>
+
+
+  <description>spark scala project sample</description>
+
+  <scm>
+    <connection>scm:git:${project.scm.url}</connection>
+    <developerConnection>${project.scm.connection}</developerConnection>
+    <url>gitlab.intra.renault.fr/irn-67491/bigdata-sample/</url>
+    <tag>HEAD</tag>
+  </scm>
+
+  <properties>
+    <dlt.version>2.2.0-SNAPSHOT</dlt.version>
+    <project.global.version>=${project.version}</project.global.version>
+    <maven.appassembler.plugin.version>1.10</maven.appassembler.plugin.version>
+    <maven.scoverage.plugin.version>1.3.0</maven.scoverage.plugin.version>
+    <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
+    <maven.jar.plugin.version>3.1.0</maven.jar.plugin.version>
+    <hadoop.version>2.7.3.2.6.1.0-129</hadoop.version>
+    <elasticsearch-spark.version>6.2.4</elasticsearch-spark.version>
+    <lucene.version>5.5.2</lucene.version>
+    <guava.version>18.0</guava.version>
+    <jackson.version>2.6.7</jackson.version>
+    <ojdbc.version>10.2.0.4</ojdbc.version>
+    <biojava3.version>3.0</biojava3.version>
+    <h2.version>1.4.195</h2.version>
+    <sqljdbc4.version>4.0</sqljdbc4.version>
+    <jsqlparser.version>0.9.5</jsqlparser.version>
+    <mysql.java.connector.version>5.1.38</mysql.java.connector.version>
+    <commons-configuration.version>1.10</commons-configuration.version>
+    <bigdata-commons.version>1.0.0</bigdata-commons.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.github.okulab</groupId>
+      <artifactId>dlt-commons</artifactId>
+      <version>${dlt.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.elasticsearch</groupId>
+          <artifactId>elasticsearch</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.fasterxml.jackson.core</groupId>
+          <artifactId>jackson-core</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>com.github.okulab</groupId>
+      <artifactId>dlt-fs</artifactId>
+      <version>${dlt.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.elasticsearch</groupId>
+          <artifactId>elasticsearch</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.fasterxml.jackson.core</groupId>
+          <artifactId>jackson-core</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+
+    <dependency>
+      <groupId>com.github.okulab</groupId>
+      <artifactId>dlt-test</artifactId>
+      <version>${dlt.version}</version>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>javax.servlet</groupId>
+          <artifactId>servlet-api</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.fasterxml.jackson.core</groupId>
+          <artifactId>jackson-core</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+  </dependencies>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>com.github.okulab</groupId>
+        <artifactId>sample-job</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.github.okulab</groupId>
+        <artifactId>dlt-commons</artifactId>
+        <version>${dlt.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>org.elasticsearch</groupId>
+            <artifactId>elasticsearch</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+
+      <dependency>
+        <groupId>com.github.okulab</groupId>
+        <artifactId>dlt-test</artifactId>
+        <version>${dlt.version}</version>
+        <scope>test</scope>
+        <exclusions>
+          <exclusion>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+
+      <dependency>
+        <groupId>commons-configuration</groupId>
+        <artifactId>commons-configuration</artifactId>
+        <version>${commons-configuration.version}</version>
+      </dependency>
+
+    </dependencies>
+  </dependencyManagement>
+
+</project>

@@ -1,0 +1,10 @@
+<coordinator-app name="SAMPLE_${project.version}_SAMPLE_@environment@_TEST_C"
+  frequency="*/5 * * * *"
+  start="${start_date}" end="${end_date}" timezone="Europe/Paris"
+  xmlns="uri:oozie:coordinator:0.2">
+  <action>
+    <workflow>
+      <app-path>${wf_application_path}</app-path>
+   </workflow>
+  </action>
+</coordinator-app>

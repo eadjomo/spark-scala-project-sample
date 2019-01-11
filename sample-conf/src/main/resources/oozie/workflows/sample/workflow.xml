@@ -1,0 +1,55 @@
+<workflow-app name="SAMPLE_${project.version}_SAMPLE_@environment@_TEST_W" xmlns="uri:oozie:workflow:0.5">
+  <credentials>
+    <credential name="hcat" type="hcat">
+      <property>
+        <name>hcat.metastore.uri</name>
+        <value>${hcat_metastore_uri}</value>
+      </property>
+      <property>
+        <name>hcat.metastore.principal</name>
+        <value>${hcat_metastore_principal}</value>
+      </property>
+    </credential>
+  </credentials>
+  <start to="start"/>
+  <kill name="kill">
+    <message>Action failed, error message[${wf:errorMessage(wf:lastErrorNode())}]</message>
+  </kill>
+  <action name="kill-email">
+    <email xmlns="uri:oozie:email-action:0.2">
+      <to>${toto}</to>
+      <cc>other-cconner@test.com</cc>
+      <subject>WF ${wf:id()} failed</subject>
+      <body>Shell action failed.</body>
+    </email>
+    <ok to="kill"/>
+    <error to="kill"/>
+  </action>
+  <action name="start">
+    <spark xmlns="uri:oozie:spark-action:0.2">
+      <job-tracker>${jobTracker}</job-tracker>
+      <name-node>${nameNode}</name-node>
+      <configuration>
+        <property>
+          <name>oozie.action.sharelib.for.spark</name>
+          <value>spark2</value>
+        </property>
+        <property>
+          <name>oozie.launcher.mapred.job.queue.name</name>
+          <value>${oozie_queue}</value>
+        </property>
+      </configuration>
+      <master>yarn</master>
+      <mode>cluster</mode>
+      <name>${spark_name_prefix}BIG_DATA_SAMPLE</name>
+      <class>${jar_main}</class>
+      <jar>${jar_path}</jar>
+      <spark-opts>${app_spark_options}</spark-opts>
+      <arg>-d</arg>
+      <arg>${input_file_path}</arg>
+    </spark>
+    <ok to="End"/>
+    <error to="kill-email"/>
+  </action>
+  <end name="End"/>
+</workflow-app>

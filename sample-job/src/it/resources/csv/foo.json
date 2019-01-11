@@ -1,0 +1,13 @@
+{
+  "path": ["hdfs://127.0.0.1:12345/tmp/hadoop/csv/simplefile.csv"],
+  "type" : "csv",
+  "delimiter": ";",
+  "hasHeader": "true",
+  "fields": [
+    "nom",
+    "model",
+    "year",
+    "color"
+  ]
+}
+

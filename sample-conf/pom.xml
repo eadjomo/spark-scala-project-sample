@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <groupId>com.github.okulab</groupId>
+    <artifactId>spark-scala-project-sample</artifactId>
+    <version>2.2.0-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>sample-conf</artifactId>
+
+  <dependencies>
+    <dependency>
+      <groupId>commons-configuration</groupId>
+      <artifactId>commons-configuration</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.github.okulab</groupId>
+      <artifactId>sample-job</artifactId>
+      <scope>provided</scope>
+      <classifier>with-dependencies</classifier>
+      <version>${project.parent.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.github.okulab</groupId>
+      <artifactId>sample-job</artifactId>
+    </dependency>
+
+  </dependencies>
+  <properties>
+    <filter.properties>${filter.properties}</filter.properties>
+  </properties>
+  <profiles>
+    <profile>
+      <id>hdp25</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+        <filter.properties>hdp-2-5.properties</filter.properties>
+      </properties>
+    </profile>
+    <profile>
+      <id>hdp26</id>
+      <properties>
+        <filter.properties>hdp-2-6.properties</filter.properties>
+      </properties>
+    </profile>
+  </profiles>
+
+
+  <build>
+    <filters>
+      <filter>${basedir}/src/main/filters/${filter.properties}</filter>
+    </filters>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
+    <plugins>
+
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.1.0</version>
+        <executions>
+          <execution>
+            <id>prod-resources</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.outputDirectory}/prd</outputDirectory>
+              <filters>
+                <filter>${basedir}/src/main/filters/${filter.properties}</filter>
+              </filters>
+            </configuration>
+          </execution>
+
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>appassembler-maven-plugin</artifactId>
+        <version>1.10</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>assemble</goal>
+            </goals>
+            <phase>package</phase>
+          </execution>
+        </executions>
+        <configuration>
+          <configurationDirectory>conf</configurationDirectory>
+          <copyConfigurationDirectory>true</copyConfigurationDirectory>
+          <configurationSourceDirectory>src/main/resources/local-conf</configurationSourceDirectory>
+          <programs>
+            <program>
+              <mainClass>Main</mainClass>
+              <name>main</name>
+            </program>
+          </programs>
+          <repositoryLayout>flat</repositoryLayout>
+          <binFileExtensions>
+            <unix>.sh</unix>
+          </binFileExtensions>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>deploy-prd</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+            <configuration>
+              <descriptors>
+                <descriptor>src/main/assembly/descriptor-deploy-run-prd.xml</descriptor>
+              </descriptors>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>buildnumber-maven-plugin</artifactId>
+        <version>1.4</version>
+        <executions>
+          <execution>
+            <phase>validate</phase>
+            <goals>
+              <goal>create-timestamp</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <timestampFormat>>yyyy-MM-dd'T'HH:mm'Z'</timestampFormat>
+          <timestampPropertyName>startdate</timestampPropertyName>
+        </configuration>
+      </plugin>
+
+    </plugins>
+  </build>
+
+
+</project>
